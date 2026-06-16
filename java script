@@ -1,0 +1,16 @@
+// Supabase Inaippu
+const _supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+
+// Data-va Database-la save panna
+async function processFeedbackWithAI() {
+    // ... unga keyword analysis logic ...
+
+    const { data, error } = await _supabase
+      .from('complaints')
+      .insert([
+        { village: village, ward: ward, name: name, text: text, gps: gps, image: base64ImageString, status: "Pending" }
+      ]);
+
+    if (error) alert("Database Error: " + error.message);
+    else alert("✅ Data Cloud Database-la permanent-ah save aayiduchu!");
+}
