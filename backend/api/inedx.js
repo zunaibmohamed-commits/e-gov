@@ -1,31 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+const path = require('path'); // Path டூல் முக்கியம்!
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true }));
 
-// DIRECT STATIC LINKING: Intha line backend-aiyum frontend-aiyum path block illama inaikkum
-app.use(express.static(__dirname));
+// 1. Backend ஃபோல்டர்க்குள்ள இருக்குற index.html-ஐ ஆட்டோமேட்டிக்கா லோடு பண்ண வைக்கிறது
+app.use(express.static(path.join(__dirname)));
 
 let localInMemoryDatabase = [];
 
-// API: Get Data
+// 2. API Routes
 app.get('/api/grievances', (req, res) => {
     res.json(localInMemoryDatabase);
 });
 
-// API: Post Data
 app.post('/api/grievances', (req, res) => {
-    const backendId = "TN-BACK-" + Date.now();
+    const backendId = Date.now().toString();
     const newGrievance = { id: backendId, _id: backendId, ...req.body };
     localInMemoryDatabase.unshift(newGrievance); 
     res.status(201).json(newGrievance);
 });
 
-// API: Put Status Toggle
 app.put('/api/grievances/:id', (req, res) => {
     const { id } = req.params;
     let item = localInMemoryDatabase.find(c => c.id === id || c._id === id || c.trackingId === id);
@@ -34,16 +31,12 @@ app.put('/api/grievances/:id', (req, res) => {
     res.json(item);
 });
 
-// ROOT ROUTER: Direct-ah index.html file-ah pull panni browser-ku tharum
+// 3. ஹோம் பேஜ் லோடு ஆகும்போது index.html ஃபைலை அனுப்பும் முக்கியமான லைன்!
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    module.exports = app;
 });
 
-// Live Cloud Host standard dynamic port selection setup
-const API_URL = window.location.origin + '/api/grievances';
-
+const PORT = 5000;
 app.listen(PORT, () => {
-    console.log(`==================================================`);
-    console.log(`🚀 LIVE PRODUCTION SERVERS ACTIVE ON PORT ${PORT}`);
-    console.log(`==================================================`);
+    module.exports = app;
 });
