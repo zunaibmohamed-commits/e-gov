@@ -1,16 +1,48 @@
-// Supabase Inaippu
-const _supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
 
-// Data-va Database-la save panna
-async function processFeedbackWithAI() {
-    // ... unga keyword analysis logic ...
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true }));
 
-    const { data, error } = await _supabase
-      .from('complaints')
-      .insert([
-        { village: village, ward: ward, name: name, text: text, gps: gps, image: base64ImageString, status: "Pending" }
-      ]);
+// DIRECT STATIC LINKING: Intha line backend-aiyum frontend-aiyum path block illama inaikkum
+app.use(express.static(__dirname));
 
-    if (error) alert("Database Error: " + error.message);
-    else alert("✅ Data Cloud Database-la permanent-ah save aayiduchu!");
-}
+let localInMemoryDatabase = [];
+
+// API: Get Data
+app.get('/api/grievances', (req, res) => {
+    res.json(localInMemoryDatabase);
+});
+
+// API: Post Data
+app.post('/api/grievances', (req, res) => {
+    const backendId = "TN-BACK-" + Date.now();
+    const newGrievance = { id: backendId, _id: backendId, ...req.body };
+    localInMemoryDatabase.unshift(newGrievance); 
+    res.status(201).json(newGrievance);
+});
+
+// API: Put Status Toggle
+app.put('/api/grievances/:id', (req, res) => {
+    const { id } = req.params;
+    let item = localInMemoryDatabase.find(c => c.id === id || c._id === id || c.trackingId === id);
+    if (!item) return res.status(404).json({ error: 'Not found' });
+    item.status = (item.status === "Pending Investigation") ? "Resolved & Closed ✅" : "Pending Investigation";
+    res.json(item);
+});
+
+// ROOT ROUTER: Direct-ah index.html file-ah pull panni browser-ku tharum
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+const PORT = 5000;
+app.listen(PORT, () => {
+    console.log(`\n==================================================`);
+    console.log(`🚀 MASTER APP BUNDLE IS LIVE AND RUNNING SMOOTHLY!`);
+    console.log(`🌐 COPY AND OPEN THIS LINK: http://localhost:5000`);
+    console.log(`==================================================\n`);
+});
