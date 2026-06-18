@@ -1,42 +1,38 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path'); // Path டூல் முக்கியம்!
-
-const app = express();
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-
-// 1. Backend ஃபோல்டர்க்குள்ள இருக்குற index.html-ஐ ஆட்டோமேட்டிக்கா லோடு பண்ண வைக்கிறது
-app.use(express.static(path.join(__dirname)));
-
-let localInMemoryDatabase = [];
-
-// 2. API Routes
-app.get('/api/grievances', (req, res) => {
-    res.json(localInMemoryDatabase);
+// Add these new Schemas for TN Geographical Hierarchy Map Data
+const BlockSchema = new mongoose.Schema({
+    name: String,
+    villages: [String] // Array of all 12,525 villages split inside blocks
 });
 
-app.post('/api/grievances', (req, res) => {
-    const backendId = Date.now().toString();
-    const newGrievance = { id: backendId, _id: backendId, ...req.body };
-    localInMemoryDatabase.unshift(newGrievance); 
-    res.status(201).json(newGrievance);
+const DistrictGeoSchema = new mongoose.Schema({
+    district: { type: String, unique: true },
+    blocks: [BlockSchema]
 });
 
-app.put('/api/grievances/:id', (req, res) => {
-    const { id } = req.params;
-    let item = localInMemoryDatabase.find(c => c.id === id || c._id === id || c.trackingId === id);
-    if (!item) return res.status(404).json({ error: 'Not found' });
-    item.status = (item.status === "Pending Investigation") ? "Resolved & Closed ✅" : "Pending Investigation";
-    res.json(item);
+const CountryGeo = mongoose.model('CountryGeo', DistrictGeoSchema);
+
+// 🌐 API Endpoints to Fetch Real-time Dynamic Dropdowns data from database
+app.get('/api/geo/districts', async (req, res) => {
+    try {
+        const districts = await CountryGeo.find({}).distinct('district');
+        res.json(districts);
+    } catch (err) { res.status(500).json({ error: "Districts loading failed" }); }
 });
 
-// 3. ஹோம் பேஜ் லோடு ஆகும்போது index.html ஃபைலை அனுப்பும் முக்கியமான லைன்!
-app.get('/', (req, res) => {
-    module.exports = app;
+app.get('/api/geo/blocks/:district', async (req, res) => {
+    try {
+        const data = await CountryGeo.findOne({ district: req.params.district });
+        if(!data) return res.json([]);
+        const blocksList = data.blocks.map(b => b.name);
+        res.json(blocksList);
+    } catch (err) { res.status(500).json({ error: "Blocks fetch error" }); }
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-    module.exports = app;
+app.get('/api/geo/villages/:district/:block', async (req, res) => {
+    try {
+        const data = await CountryGeo.findOne({ district: req.params.district });
+        if(!data) return res.json([]);
+        const blockObj = data.blocks.find(b => b.name === req.params.block);
+        res.json(blockObj ? blockObj.villages : []);
+    } catch (err) { res.status(500).json({ error: "Villages fetch error" }); }
 });

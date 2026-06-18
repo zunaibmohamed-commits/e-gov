@@ -73,3 +73,53 @@ if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => console.log(`🚀 Node Engine running smoothly on Port ${PORT}`));
 }
 module.exports = app;
+// Replace old syncDistrictBlocks & syncBlockVillages with async dynamic fetch functions
+
+async function loadInitialDistricts() {
+    const response = await fetch('/api/geo/districts');
+    const districts = await response.json();
+    const dSelect = document.getElementById('districtField');
+    dSelect.innerHTML = '<option value="">-- Select District (38) --</option>';
+    districts.forEach(d => {
+        let opt = document.createElement('option'); opt.value = d; opt.innerText = d;
+        dSelect.appendChild(opt);
+    });
+}
+
+async function updateBlocks() {
+    const dist = document.getElementById('districtField').value;
+    const bSelect = document.getElementById('blockField');
+    bSelect.innerHTML = '<option value="">-- Loading Blocks... --</option>';
+    
+    if(!dist) return;
+    
+    const response = await fetch(`/api/geo/blocks/${dist}`);
+    const blocks = await response.json();
+    bSelect.innerHTML = '<option value="">-- Choose Block (388) --</option>';
+    blocks.forEach(blk => {
+        let opt = document.createElement('option'); opt.value = blk; opt.innerText = blk;
+        bSelect.appendChild(opt);
+    });
+}
+
+async function updateVillages() {
+    const dist = document.getElementById('districtField').value;
+    const blk = document.getElementById('blockField').value;
+    const vSelect = document.getElementById('villageField');
+    vSelect.innerHTML = '<option value="">-- Loading Villages... --</option>';
+    
+    if(!blk) return;
+
+    const response = await fetch(`/api/geo/villages/${dist}/${blk}`);
+    const villages = await response.json();
+    vSelect.innerHTML = '<option value="">-- Choose Village (12525) --</option>';
+    villages.forEach(vil => {
+        let opt = document.createElement('option'); opt.value = vil; opt.innerText = vil;
+        vSelect.appendChild(opt);
+    });
+}
+
+window.onload = function() {
+    loadInitialDistricts();
+    initializeLedgerSynchronizer();
+};
