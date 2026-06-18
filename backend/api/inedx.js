@@ -1,38 +1,77 @@
-// Add these new Schemas for TN Geographical Hierarchy Map Data
-const BlockSchema = new mongoose.Schema({
-    name: String,
-    villages: [String] // Array of all 12,525 villages split inside blocks
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const mongoose = require('mongoose');
+
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: '50mb' })); // Higher memory boundary stack size to allocate attachments strings
+
+app.use(express.static(path.join(__dirname, '../')));
+
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/panchayat_db";
+mongoose.connect(MONGO_URI)
+    .then(() => console.log("💾 MongoDB Connected Successfully."))
+    .catch(err => console.error("❌ DB Failure Layout:", err));
+
+// Database Architecture Schema Setup incorporating attachment graphics
+const GrievanceSchema = new mongoose.Schema({
+    trackingId: { type: String, unique: true },
+    timestamp: String, district: String, block: String, village: String,
+    name: String, text: String, category: String, priority: String, badgeClass: String,
+    status: { type: String, default: "Pending Investigation" },
+    attachedGraphic: String // Stores raw payload imagery reference string maps
 });
+const Grievance = mongoose.model('Grievance', GrievanceSchema);
 
-const DistrictGeoSchema = new mongoose.Schema({
-    district: { type: String, unique: true },
-    blocks: [BlockSchema]
-});
-
-const CountryGeo = mongoose.model('CountryGeo', DistrictGeoSchema);
-
-// 🌐 API Endpoints to Fetch Real-time Dynamic Dropdowns data from database
-app.get('/api/geo/districts', async (req, res) => {
+app.get('/api/grievances', async (req, res) => {
     try {
-        const districts = await CountryGeo.find({}).distinct('district');
-        res.json(districts);
-    } catch (err) { res.status(500).json({ error: "Districts loading failed" }); }
+        const data = await Grievance.find({}).sort({ _id: -1 }); res.json(data);
+    } catch (err) { res.status(500).json({ error: "Read Operation Halted" }); }
 });
 
-app.get('/api/geo/blocks/:district', async (req, res) => {
+app.post('/api/grievances', async (req, res) => {
     try {
-        const data = await CountryGeo.findOne({ district: req.params.district });
-        if(!data) return res.json([]);
-        const blocksList = data.blocks.map(b => b.name);
-        res.json(blocksList);
-    } catch (err) { res.status(500).json({ error: "Blocks fetch error" }); }
+        const { district, block, village, name, text, attachedGraphic } = req.body;
+        const cleanText = text.toLowerCase();
+
+        let category = "General Administration 🏢";
+        let priority = "Routine Low ℹ️"; let badgeClass = "low"; let scoringMatrix = 0;
+
+        if (/water|thanni|thanneer|தண்ணீர்|குழாய்|pipe|borewell|leakage/i.test(cleanText)) {
+            category = "Water Supply Dept 💧"; scoringMatrix += 35;
+        } else if (/road|light|street|சாலை|விளக்கு|தெரு|pothole/i.test(cleanText)) {
+            category = "Roads & Infra 🛣️"; scoringMatrix += 25;
+        } else if (/waste|kuppai|garbage|drainage|குப்பை|சாக்கடை/i.test(cleanText)) {
+            category = "Sanitation Dept ♻️"; scoringMatrix += 30;
+        }
+
+        if (/danger|risk|broken|உடைந்த|அபாயம்|emergency|severe|damage|accident/i.test(cleanText)) {
+            scoringMatrix += 20;
+        }
+
+        if (scoringMatrix >= 45) { priority = "Critical High 🚨"; badgeClass = "high"; }
+        else if (scoringMatrix >= 25) { priority = "Medium Urgent ⚠️"; badgeClass = "medium"; }
+
+        const trackingId = "TN-PNC-" + Math.floor(100000 + Math.random() * 900000);
+        const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+        const record = new Grievance({ trackingId, timestamp, district, block, village, name, text, category, priority, badgeClass, attachedGraphic });
+        await record.save(); res.status(201).json(record);
+    } catch (err) { res.status(500).json({ error: "Write Loop Failure" }); }
 });
 
-app.get('/api/geo/villages/:district/:block', async (req, res) => {
+app.put('/api/grievances/:id', async (req, res) => {
     try {
-        const data = await CountryGeo.findOne({ district: req.params.district });
-        if(!data) return res.json([]);
-        const blockObj = data.blocks.find(b => b.name === req.params.block);
-        res.json(blockObj ? blockObj.villages : []);
-    } catch (err) { res.status(500).json({ error: "Villages fetch error" }); }
+        const item = await Grievance.findOne({ trackingId: req.params.id });
+        if (!item) return res.status(404).json({ error: 'Data Node Missing' });
+        item.status = (item.status === "Pending Investigation") ? "Resolved & Closed ✅" : "Pending Investigation";
+        await item.save(); res.json(item);
+    } catch (err) { res.status(500).json({ error: "Workflow State Interrupted" }); }
 });
+
+const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => console.log(`🚀 AI Engine on Port ${PORT}`));
+}
+module.exports = app;

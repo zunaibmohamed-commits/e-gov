@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Panchayat Governance Core v3.0</title>
+    <title>AI Panchayat Sovereign Matrix</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-gradient: radial-gradient(circle at 50% 50%, #12072B 0%, #05020A 100%);
-            --glass-bg: rgba(18, 10, 36, 0.45);
-            --glass-border: rgba(147, 51, 234, 0.25);
-            --glow-purple: rgba(168, 85, 247, 0.6);
-            --neon-accent: #A855F7;
+            --bg-gradient: radial-gradient(circle at 50% 50%, #0c041f 0%, #030106 100%);
+            --glass-bg: rgba(15, 8, 32, 0.55);
+            --glass-border: rgba(147, 51, 234, 0.3);
+            --neon-purple: #A855F7;
             --neon-green: #10B981;
             --neon-red: #EF4444;
             --text-primary: #F8FAFC;
@@ -22,47 +21,25 @@
             background: var(--bg-gradient);
             color: var(--text-primary);
             min-height: 100vh;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: system-ui, sans-serif;
             padding: 30px 20px;
-            overflow-x: hidden;
         }
 
-        /* 🌌 Cinematic Background Particles effect via CSS */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-                        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-                        radial-gradient(3px 3px at 50px 160px, #a855f7, rgba(0,0,0,0));
-            background-size: 200px 200px;
-            animation: cosmicShift 100s linear infinite;
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        @keyframes cosmicShift {
-            from { background-position: 0 0; }
-            to { background-position: 1000px 1000px; }
-        }
-
-        /* ✨ Premium Glassmorphism Cards */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px) saturate(120%);
-            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 25px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             margin-bottom: 25px;
         }
 
         .glass-card:hover {
-            border-color: rgba(168, 85, 247, 0.5);
-            box-shadow: 0 0 25px rgba(147, 51, 234, 0.2);
-            transform: translateY(-4px);
+            border-color: rgba(168, 85, 247, 0.6);
+            box-shadow: 0 0 25px rgba(147, 51, 234, 0.25);
         }
 
         .main-layout {
@@ -77,21 +54,18 @@
             .main-layout { grid-template-columns: 1fr; }
         }
 
-        /* 🎛️ Custom Input Overrides to match theme */
-        input, select, textarea {
-            background: rgba(5, 2, 10, 0.6) !important;
+        input, textarea {
+            background: rgba(5, 2, 10, 0.7) !important;
             border: 1px solid var(--glass-border) !important;
             color: var(--text-primary) !important;
             border-radius: 8px !important;
-            transition: all 0.3s ease !important;
         }
 
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--neon-accent) !important;
-            box-shadow: 0 0 12px var(--glow-purple) !important;
+        input:focus, textarea:focus {
+            border-color: var(--neon-purple) !important;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5) !important;
         }
 
-        /* 🎙️ Voice & Core Operational Buttons */
         .neon-btn {
             background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%) !important;
             border: none !important;
@@ -102,106 +76,59 @@
         }
 
         .neon-btn:hover {
-            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6) !important;
             transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6) !important;
         }
 
-        .voice-active {
-            background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%) !important;
-            animation: pulseGlow 1.5s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        /* 📈 Live Status Ticker Metrics */
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .metric-item {
-            text-align: center;
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* 📝 Cinematic Ledger Scroll Animations */
         .scroll-ledger {
-            max-height: 400px;
+            max-height: 420px;
             overflow-y: auto;
-            scroll-behavior: smooth;
-            padding-right: 8px;
         }
 
-        .scroll-ledger::-webkit-scrollbar {
-            width: 6px;
-        }
-        .scroll-ledger::-webkit-scrollbar-thumb {
-            background: var(--glass-border);
-            border-radius: 10px;
-        }
-
-        .complaint-node {
-            border-left: 4px solid var(--neon-accent);
-            animation: slideIn 0.5s cubic-bezier(0.1, 1, 0.1, 1) both;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(30px) translateY(10px); }
-            to { opacity: 1; transform: translateX(0) translateY(0); }
-        }
-
-        .badge-ui {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #fff;
+        .img-preview {
+            max-width: 100px;
+            border-radius: 6px;
+            margin-top: 8px;
+            display: none;
+            border: 1px solid var(--glass-border);
         }
     </style>
 </head>
 <body>
 
-    <header class="container" style="text-align: center; margin-bottom: 40px; animation: slideIn 1s ease;">
-        <h1 style="background: linear-gradient(to right, #fff, #A855F7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; font-weight: 800;">
-            🏛️ TAMIL NADU SMART PANCHAYAT AI
+    <header class="container" style="text-align: center; margin-bottom: 40px;">
+        <h1 style="background: linear-gradient(to right, #fff, #A855F7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; font-weight: 800;"></h1>
+            🏛️ TAMIL NADU SMART PANCHAYAT AI SYSTEM
         </h1>
-        <p style="color: #94A3B8;">State-Wide 38 Districts • 388 Unions • 12,525 Local Village Administrations</p>
+        <p style="color: #94A3B8;">Dynamic Decentralized Feedback Hub • Manual Ingestion & Picture Ingestion Enabled</p>
         <hr style="border-color: var(--glass-border);">
     </header>
 
     <main class="main-layout">
         <section class="glass-card">
-            <h3 style="color: #C084FC; font-weight: 700;">👤 Citizens Redressal Intake</h3>
+            <h3 style="color: #C084FC; font-weight: 700;">👤 Manual Feedback Registry</h3>
             
-            <label>Select District (மாவட்டம்):</label>
-            <select id="districtField" onchange="updateBlocks()"></select>
+            <label>Type District Name (மாவட்டம்):</label>
+            <input type="text" id="districtField" placeholder="e.g., Coimbatore, Madurai, Salem...">
 
-            <label>Select Panchayat Union / Block (ஒன்றியம்):</label>
-            <select id="blockField" onchange="updateVillages()"><option value="">-- Choose Block --</option></select>
+            <label>Type Block / Union Name (ஒன்றியம்):</label>
+            <input type="text" id="blockField" placeholder="e.g., Pollachi Union, Omalur Block...">
 
-            <label>Select Village Panchayat (கிராம ஊராட்சி):</label>
-            <select id="villageField" onchange="updateWards()"><option value="">-- Choose Village --</option></select>
-
-            <label>Assigned Administrative Ward (உள்ளாட்சி வார்டு):</label>
-            <select id="wardField"><option value="">-- Auto-Assigned Ward --</option></select>
+            <label>Type Village Panchayat Name (கிராம ஊராட்சி):</label>
+            <input type="text" id="villageField" placeholder="e.g., Arasur Village, Padi East Sector...">
 
             <label>Citizen Identity Header:</label>
             <input type="text" id="citizenName" placeholder="Enter Full Name (Optional)">
 
-            <label>🎤 Multilingual AI Continuous Voice Core:</label>
-            <button type="button" id="micTrigger" class="neon-btn" onclick="toggleVoiceTransmission()">Activate Audio Matrix Core 🎙️</button>
+            <label>📸 Reference Document Image Upload (புகார் புகைப்படம்):</label>
+            <input type="file" id="imageAttachment" accept="image/*" onchange="previewSelectedImage(event)">
+            <img id="attachmentPreview" class="img-preview" alt="Attachment Matrix View">
+
+            <label style="margin-top: 15px;">🎤 Dictation Voice Core Input Module:</label>
+            <button type="button" id="micTrigger" class="neon-btn" onclick="toggleVoiceCoreStream()" style="background:#3b82f6 !important;">Activate Audio Matrix 🎙️</button>
 
             <label>Grievance Telemetry Statement Text:</label>
-            <textarea id="feedbackArea" rows="4" placeholder="Speak via mic layer or type inputs in Tamil / English..."></textarea>
+            <textarea id="feedbackArea" rows="4" placeholder="Speak via microphone layers or type detailed alphanumeric summaries inside this layout..."></textarea>
 
             <button type="button" class="neon-btn" onclick="transmitPayloadToServer()" style="width: 100%; background: var(--neon-green) !important;">Transmit Packet to Cloud Cluster 🚀</button>
         </section>
@@ -210,26 +137,20 @@
             <div class="glass-card" style="border-left: 5px solid #A855F7; background: rgba(147, 51, 234, 0.05);">
                 <h4 style="color: #C084FC; margin-bottom: 8px;">🧠 AI Governance Trends & Decision Analytics</h4>
                 <div id="aiInsightOutput" style="font-size: 0.95rem; line-height: 1.6; color: #E2E8F0;">
-                    Awaiting live streaming transaction sequences to construct localized resolution trends...
+                    Awaiting live streaming transaction records sequence log summaries...
                 </div>
             </div>
 
-            <div class="metric-grid">
-                <div class="metric-item"><small style="color: #94A3B8;">Total Metrics Ingested</small><h2 id="totalCount" style="color: #A855F7; margin: 0;">0</h2></div>
-                <div class="metric-item"><small style="color: #94A3B8;">Critical Escalations</small><h2 id="criticalCount" style="color: var(--neon-red); margin: 0;">0</h2></div>
-                <div class="metric-item"><small style="color: #94A3B8;">Closed Resolutions</small><h2 id="resolvedCount" style="color: var(--neon-green); margin: 0;">0</h2></div>
-            </div>
-
             <div class="glass-card">
-                <div class="chart-wrapper">
+                <div style="height: 220px; position: relative;">
                     <canvas id="analyticsGraphicCanvas"></canvas>
                 </div>
             </div>
 
-            <div class="glass-card" style="flex: 1; min-height: 300px;">
-                <h4 style="color: #C084FC; margin-bottom: 15px;">📋 Realtime Audited Incident Ledger</h4>
+            <div class="glass-card" style="flex: 1;">
+                <h4 style="color: #C084FC; margin-bottom: 15px;">📋 Realtime Incident Registry & Image Audit Logs</h4>
                 <div id="ledgerScrollbox" class="scroll-ledger">
-                    <p style="text-align: center; color: #64748B;">Awaiting sync telemetry sequence streams...</p>
+                    <p style="text-align: center; color: #64748B;">Awaiting sync database matrix metrics streams...</p>
                 </div>
             </div>
         </section>
@@ -241,176 +162,90 @@
         let renderChartRef = null;
         let audioDictationCore = null;
         let isAudioStreaming = false;
+        let base64StringData = "";
 
-        // 🗺️ GEOGRAPHICAL DICTIONARY SEED GENERATOR (38 Districts + 388 Blocks Model Mapping)
-        const TN_DISTRICTS = [
-            "Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul","Erode",
-            "Kallakurichi","Kancheepuram","Karur","Krishnagiri","Madurai","Mayiladuthurai","Nagapattinam",
-            "Namakkall","Nilgiris","Perambalur","Pudukkottai","Ramanathapuram","Ranipet","Salem","Sivaganga",
-            "Tenkasi","Thanjavur","Theni","Thoothukudi","Tiruchirappalli","Tirunelveli","Tirupathur",
-            "Tiruppur","Tiruvallur","Tiruvannamalai","Tiruvarur","Vellore","Viluppuram","Virudhunagar"
-        ];
-
-        // Seeded deterministic block generation algorithm mimicking real state layout parameters
-        function fetchBlocksForDistrict(districtName) {
-            let blocks = [];
-            let totalBlocks = districtName === "Chennai" ? 5 : 10; // State block layout metric averages
-            for(let i = 1; i <= totalBlocks; i++) {
-                blocks.push(`${districtName} Union-Block-${i}`);
+        function previewSelectedImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const preview = document.getElementById('attachmentPreview');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                base64StringData = e.target.result; // Dynamic base64 parsing block array mapped matrix
             }
-            return blocks;
+            reader.readAsDataURL(file);
         }
 
-        // Seeded village matrix generator scaling up dynamically to match local micro-jurisdictions
-        function fetchVillagesForBlock(blockName) {
-            let villages = [];
-            // Dynamically yields realistic village clusters on selection runtime seamlessly
-            for(let i = 1; i <= 32; i++) { 
-                villages.push(`${blockName} - Grama Panchayat ${125 + i}`);
-            }
-            return villages;
-        }
-
-        // Populate Main Intake Framework Component
-        window.addEventListener('DOMContentLoaded', () => {
-            const dSelect = document.getElementById('districtField');
-            dSelect.innerHTML = '<option value="">-- Select District (38) --</option>';
-            TN_DISTRICTS.forEach(d => {
-                let opt = document.createElement('option'); opt.value = d; opt.innerText = d;
-                dSelect.appendChild(opt);
-            });
-            initializeLedgerSynchronizer();
-        });
-
-        function updateBlocks() {
-            const dist = document.getElementById('districtField').value;
-            const bSelect = document.getElementById('blockField');
-            bSelect.innerHTML = '<option value="">-- Choose Block (388) --</option>';
-            document.getElementById('villageField').innerHTML = '<option value="">-- Choose Village (12525) --</option>';
-            document.getElementById('wardField').innerHTML = '<option value="">-- Auto-Assigned Ward --</option>';
-            if(!dist) return;
-
-            fetchBlocksForDistrict(dist).forEach(blk => {
-                let opt = document.createElement('option'); opt.value = blk; opt.innerText = blk;
-                bSelect.appendChild(opt);
-            });
-        }
-
-        function updateVillages() {
-            const blk = document.getElementById('blockField').value;
-            const vSelect = document.getElementById('villageField');
-            vSelect.innerHTML = '<option value="">-- Choose Village (12525) --</option>';
-            if(!blk) return;
-
-            fetchVillagesForBlock(blk).forEach(vil => {
-                let opt = document.createElement('option'); opt.value = vil; opt.innerText = vil;
-                vSelect.appendChild(opt);
-            });
-        }
-
-        function updateWards() {
-            const vil = document.getElementById('villageField').value;
-            const wSelect = document.getElementById('wardField');
-            wSelect.innerHTML = '';
-            if(!vil) return;
-
-            // State specific village local wards partition range bounds: 6-15 wards
-            for(let w = 1; w <= 12; w++) {
-                let opt = document.createElement('option'); opt.value = `Ward No ${w}`; opt.innerText = `Panchayat Ward Local Room ${w}`;
-                wSelect.appendChild(opt);
-            }
-        }
-
-        // 🎤 Native Multilingual AI Continuous Voice Recognition System
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const CoreInstance = window.SpeechRecognition || window.webkitSpeechRecognition;
             audioDictationCore = new CoreInstance();
             audioDictationCore.continuous = true;
             audioDictationCore.interimResults = false;
             audioDictationCore.lang = 'ta-IN'; 
-
-            audioDictationCore.onresult = function(event) {
-                document.getElementById('feedbackArea').value += " " + event.results[event.results.length - 1][0].transcript;
+            audioDictationCore.onresult = function(e) {
+                document.getElementById('feedbackArea').value += " " + e.results[e.results.length - 1][0].transcript;
             };
         }
 
-        function toggleVoiceTransmission() {
-            if (!audioDictationCore) { alert("Core Dictation Layer Incompatible."); return; }
+        function toggleVoiceCoreStream() {
+            if (!audioDictationCore) { alert("Core Dictation Device Missing."); return; }
             const btn = document.getElementById('micTrigger');
             if (!isAudioStreaming) {
                 audioDictationCore.start(); isAudioStreaming = true;
-                btn.innerText = "Streaming Audio Ingest Layer... Speak Now 🛰️"; btn.classList.add('voice-active');
+                btn.innerText = "Streaming Audio Input Active... 🛰️"; btn.style.background = "#ef4444";
             } else {
                 audioDictationCore.stop(); isAudioStreaming = false;
-                btn.innerText = "Activate Audio Matrix Core 🎙️"; btn.classList.remove('voice-active');
+                btn.innerText = "Activate Audio Matrix 🎙️"; btn.style.background = "#3b82f6";
             }
         }
 
-        // Network Data Synchronizations
         async function initializeLedgerSynchronizer() {
             try {
-                const response = await fetch(API_URL);
-                serverCacheData = await response.json();
+                const res = await fetch(API_URL);
+                serverCacheData = await res.json();
                 updateUserInterfaceMatrices();
                 generateDynamicAnalyticalGraphics();
                 processDeepAIPredictions();
-            } catch (err) {
-                document.getElementById('ledgerScrollbox').innerHTML = `<p style="color:var(--neon-red); text-align:center;">Network cluster binding dropped.</p>`;
-            }
+            } catch (err) { console.error(err); }
         }
 
-        // 🧠 DEEP EXECUTIVE AI INSIGHTS ANALYSIS ENGINE FOR STRATEGIC DECISIONS
         function processDeepAIPredictions() {
             const display = document.getElementById('aiInsightOutput');
-            if(serverCacheData.length === 0) {
-                display.innerHTML = "✨ <b>System Insight Status:</b> Active. Analytical engine matrix listening for telemetry logs.";
-                return;
-            }
-
-            let categoryBuckets = { water: 0, infra: 0, sanitation: 0, admin: 0 };
+            if(serverCacheData.length === 0) { display.innerHTML = "System online. Send complaints payload packet details."; return; }
+            let metrics = { water: 0, infra: 0, sanitation: 0, admin: 0 };
             serverCacheData.forEach(r => {
-                if(r.category.includes("Water")) categoryBuckets.water++;
-                else if(r.category.includes("Roads")) categoryBuckets.infra++;
-                else if(r.category.includes("Sanitation")) categoryBuckets.sanitation++;
-                else categoryBuckets.admin++;
+                if(r.category.includes("Water")) metrics.water++;
+                else if(r.category.includes("Roads")) metrics.infra++;
+                else if(r.category.includes("Sanitation")) metrics.sanitation++;
+                else metrics.admin++;
             });
-
-            let topTrend = Object.keys(categoryBuckets).map(k => ({name: k, total: categoryBuckets[k]})).sort((a,b)=>b.total-a.total)[0];
-            let dynamicStrategyString = "";
-
-            if (topTrend.name === 'water' && topTrend.total > 0) {
-                dynamicStrategyString = "🚨 <b>Trend Alert:</b> Localized anomalies identified inside deep clean water infrastructure networks.<br>🎯 <b>Better Decision Recommendation:</b> Deploy immediate capital outlays to pump arrays and implement deep-bore telemetry monitoring structures across impacted village wards.";
-            } else if (topTrend.name === 'infra' && topTrend.total > 0) {
-                dynamicStrategyString = "🚨 <b>Trend Alert:</b> System logged a heavy structural drop in transit pathways and lighting layout indicators.<br>🎯 <b>Better Decision Recommendation:</b> Pivot state development grant components towards asphalt re-laying tasks and low-power smart solar grid streetlamps.";
-            } else if (topTrend.name === 'sanitation' && topTrend.total > 0) {
-                dynamicStrategyString = "🚨 <b>Trend Alert:</b> Elevated biological and solid waste clustering detected inside public sector arrays.<br>🎯 <b>Better Decision Recommendation:</b> Fast-track public health resource intervals, establish micro-composting structures, and scale localized mechanical logistics clearance.";
-            } else {
-                dynamicStrategyString = "🏆 <b>System Status Nominal:</b> Distribution parameters show structural balancing. No critical localized operational clusters observed. Maintain standard asset allocation pipeline cycles.";
-            }
-
-            display.innerHTML = `<b>Primary State Issue Profile:</b> <span style="text-shadow: 0 0 10px var(--neon-accent); color:#E9D5FF; font-weight:bold;">${topTrend.name.toUpperCase()} (Incident Weight Count: ${topTrend.total})</span><br>${dynamicStrategyString}`;
+            let top = Object.keys(metrics).map(k => ({name: k, total: metrics[k]})).sort((a,b)=>b.total-a.total)[0];
+            display.innerHTML = `<b>Primary Active Painpoint:</b> <span style="color:#C084FC; font-weight:bold;">${top.name.toUpperCase()} (${top.total} cases logged)</span><br>🎯 <b>Better Decision Support:</b> High telemetry priority index tracking across custom user inputted villages. Divert localized funding reserves into localized resource maps immediately.`;
         }
 
         async function transmitPayloadToServer() {
             const text = document.getElementById('feedbackArea').value.trim();
-            const district = document.getElementById('districtField').value;
-            const block = document.getElementById('blockField').value;
-            const village = document.getElementById('villageField').value + " (" + document.getElementById('wardField').value + ")";
+            const district = document.getElementById('districtField').value.trim();
+            const block = document.getElementById('blockField').value.trim();
+            const village = document.getElementById('villageField').value.trim();
             const name = document.getElementById('citizenName').value.trim() || "Anonymous Citizen";
 
-            if (!district || !block || !village || !text) { alert("Please compile all mandatory validation fields."); return; }
+            if (!district || !block || !village || !text) { alert("Please complete manual input parameters."); return; }
 
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ district, block, village, name, text })
+                    body: JSON.stringify({ district, block, village, name, text, attachedGraphic: base64StringData })
                 });
                 if(response.ok) {
                     document.getElementById('feedbackArea').value = "";
+                    document.getElementById('attachmentPreview').style.display = 'none';
+                    base64StringData = "";
                     initializeLedgerSynchronizer();
                 }
-            } catch (err) { alert("Ingestion Pipeline Blocked Payload Package."); }
+            } catch (err) { alert("Server pipeline write error."); }
         }
 
         async function triggerStateTransition(id) {
@@ -422,61 +257,43 @@
 
         function updateUserInterfaceMatrices() {
             const scroller = document.getElementById('ledgerScrollbox');
-            document.getElementById('totalCount').innerText = serverCacheData.length;
-            document.getElementById('criticalCount').innerText = serverCacheData.filter(r => r.badgeClass === 'high' && !r.status.includes('Resolved')).length;
-            document.getElementById('resolvedCount').innerText = serverCacheData.filter(r => r.status.includes('Resolved')).length;
-
-            if(serverCacheData.length === 0) {
-                scroller.innerHTML = `<p style="text-align: center; color:#64748B;">No records current inside ledger storage matrix.</p>`;
-                return;
-            }
+            if(serverCacheData.length === 0) { scroller.innerHTML = `<p style="text-align: center;">No transaction maps loaded.</p>`; return; }
             scroller.innerHTML = "";
             serverCacheData.forEach(node => {
                 const statusCheck = node.status.includes('Resolved');
                 const box = document.createElement('div');
-                box.className = "complaint-node glass-card";
-                box.style.background = "rgba(255,255,255,0.01)";
-                box.style.borderLeftColor = statusCheck ? "var(--neon-green)" : (node.badgeClass === 'high' ? "var(--neon-red)" : "var(--neon-accent)");
+                box.style.borderLeft = "4px solid " + (statusCheck ? "var(--neon-green)" : "var(--neon-purple)");
+                box.style.background = "rgba(255,255,255,0.02)";
+                box.style.padding = "15px"; box.style.borderRadius = "8px"; box.style.marginBottom = "12px";
                 box.innerHTML = `
                     <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94A3B8;">
-                        <span>ID: <b>${node.trackingId}</b></span>
-                        <button class="neon-btn" onclick="triggerStateTransition('${node.trackingId}')" style="padding:1px 8px; font-size:0.75rem; background:${statusCheck ? 'var(--neon-accent)' : 'var(--neon-green)'} !important;">${statusCheck ? 'Reopen':'Close ✅'}</button>
+                        <span>Ref ID: <b>${node.trackingId}</b></span>
+                        <button onclick="triggerStateTransition('${node.trackingId}')" style="font-size:0.7rem; padding:2px 8px; background:rgba(255,255,255,0.1)">Toggle state</button>
                     </div>
-                    <div style="font-size:0.85rem; margin:5px 0; color:#C084FC;">📍 Dist: <b>${node.district}</b> > ${node.village}</div>
-                    <p class="${statusCheck ? 'resolved-text':''}" style="margin:5px 0; color:#F1F5F9;">"${node.text}"</p>
-                    <div><span class="badge-ui" style="background:#3B82F6;">${node.category}</span> <span class="badge-ui ${node.badgeClass}">${node.priority}</span></div>
+                    <div style="font-size:0.85rem; margin:5px 0; color:#A855F7;">📍 Location: <b>${node.district}</b> > ${node.block} > <b>${node.village}</b></div>
+                    <p style="margin:5px 0;">"${node.text}"</p>
+                    ${node.attachedGraphic ? `<img src="${node.attachedGraphic}" style="max-width:120px; border-radius:4px; display:block; margin:8px 0; border:1px solid var(--glass-border);" />` : ''}
+                    <div style="margin-top:5px;"><mark style="font-size:0.7rem; background: #3B82F6; color:white; padding:2px 6px; border-radius:4px;">${node.category}</mark></div>
                 `;
                 scroller.appendChild(box);
             });
         }
 
         function generateDynamicAnalyticalGraphics() {
-            const evaluationMetrics = ["Water Supply Dept 💧", "Roads & Infra 🛣️", "Sanitation Dept ♻️", "General Administration 🏢"];
-            const plotDeltas = evaluationMetrics.map(cat => serverCacheData.filter(r => r.category === cat).length);
+            const keys = ["Water Supply Dept 💧", "Roads & Infra 🛣️", "Sanitation Dept ♻️", "General Administration 🏢"];
+            const plotDeltas = keys.map(cat => serverCacheData.filter(r => r.category === cat).length);
             const ctx = document.getElementById('analyticsGraphicCanvas').getContext('2d');
-            
             if(renderChartRef) renderChartRef.destroy();
             renderChartRef = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ["Water Metrics", "Road/Infra Paths", "Sanitation Systems", "General Admin"],
-                    datasets: [{
-                        data: plotDeltas,
-                        backgroundColor: ['rgba(59, 130, 246, 0.7)', 'rgba(234, 179, 8, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(147, 51, 234, 0.7)'],
-                        borderColor: ['#3b82f6', '#eab308', '#10b981', '#a855f7'],
-                        borderWidth: 1
-                    }]
+                    labels: ["Water Metrics", "Infra Paths", "Sanitation", "General Admin"],
+                    datasets: [{ data: plotDeltas, backgroundColor: ['#3b82f6', '#eab308', '#10b981', '#a855f7'] }]
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: '#94A3B8' } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8', precision: 0 } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
+        window.onload = initializeLedgerSynchronizer;
     </script>
 </body>
 </html>
