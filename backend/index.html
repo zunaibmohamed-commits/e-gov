@@ -37,11 +37,6 @@
             margin-bottom: 25px;
         }
 
-        .glass-card:hover {
-            border-color: rgba(168, 85, 247, 0.6);
-            box-shadow: 0 0 25px rgba(147, 51, 234, 0.25);
-        }
-
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 1.3fr;
@@ -61,11 +56,6 @@
             border-radius: 8px !important;
         }
 
-        input:focus, textarea:focus {
-            border-color: var(--neon-purple) !important;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5) !important;
-        }
-
         .neon-btn {
             background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%) !important;
             border: none !important;
@@ -73,11 +63,6 @@
             font-weight: 700 !important;
             box-shadow: 0 4px 14px rgba(147, 51, 234, 0.4);
             transition: all 0.3s ease !important;
-        }
-
-        .neon-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6) !important;
         }
 
         .scroll-ledger {
@@ -97,7 +82,7 @@
 <body>
 
     <header class="container" style="text-align: center; margin-bottom: 40px;">
-        <h1 style="background: linear-gradient(to right, #fff, #A855F7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; font-weight: 800;"></h1>
+        <h1 style="background: linear-gradient(to right, #fff, #A855F7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; font-weight: 800;">
             🏛️ TAMIL NADU SMART PANCHAYAT AI SYSTEM
         </h1>
         <p style="color: #94A3B8;">Dynamic Decentralized Feedback Hub • Manual Ingestion & Picture Ingestion Enabled</p>
@@ -105,6 +90,7 @@
     </header>
 
     <main class="main-layout">
+        <!-- FORM INGESTION MATRIX -->
         <section class="glass-card">
             <h3 style="color: #C084FC; font-weight: 700;">👤 Manual Feedback Registry</h3>
             
@@ -115,29 +101,30 @@
             <input type="text" id="blockField" placeholder="e.g., Pollachi Union, Omalur Block...">
 
             <label>Type Village Panchayat Name (கிராம ஊராட்சி):</label>
-            <input type="text" id="villageField" placeholder="e.g., Arasur Village, Padi East Sector...">
+            <input type="text" id="villageField" placeholder="e.g., Arasur Village...">
 
             <label>Citizen Identity Header:</label>
             <input type="text" id="citizenName" placeholder="Enter Full Name (Optional)">
 
-            <label>📸 Reference Document Image Upload (புகார் புகைப்படம்):</label>
+            <label>📸 Reference Document Image Upload:</label>
             <input type="file" id="imageAttachment" accept="image/*" onchange="previewSelectedImage(event)">
             <img id="attachmentPreview" class="img-preview" alt="Attachment Matrix View">
 
-            <label style="margin-top: 15px;">🎤 Dictation Voice Core Input Module:</label>
+            <label style="margin-top: 15px;">🎤 Dictation Voice Core:</label>
             <button type="button" id="micTrigger" class="neon-btn" onclick="toggleVoiceCoreStream()" style="background:#3b82f6 !important;">Activate Audio Matrix 🎙️</button>
 
             <label>Grievance Telemetry Statement Text:</label>
-            <textarea id="feedbackArea" rows="4" placeholder="Speak via microphone layers or type detailed alphanumeric summaries inside this layout..."></textarea>
+            <textarea id="feedbackArea" rows="4" placeholder="Type detailed summaries here..."></textarea>
 
             <button type="button" class="neon-btn" onclick="transmitPayloadToServer()" style="width: 100%; background: var(--neon-green) !important;">Transmit Packet to Cloud Cluster 🚀</button>
         </section>
 
+        <!-- LIVE ANALYTICS DATA PLATFORM LAYOUT -->
         <section style="display: flex; flex-direction: column;">
             <div class="glass-card" style="border-left: 5px solid #A855F7; background: rgba(147, 51, 234, 0.05);">
                 <h4 style="color: #C084FC; margin-bottom: 8px;">🧠 AI Governance Trends & Decision Analytics</h4>
                 <div id="aiInsightOutput" style="font-size: 0.95rem; line-height: 1.6; color: #E2E8F0;">
-                    Awaiting live streaming transaction records sequence log summaries...
+                    Awaiting live streaming transaction records...
                 </div>
             </div>
 
@@ -150,14 +137,14 @@
             <div class="glass-card" style="flex: 1;">
                 <h4 style="color: #C084FC; margin-bottom: 15px;">📋 Realtime Incident Registry & Image Audit Logs</h4>
                 <div id="ledgerScrollbox" class="scroll-ledger">
-                    <p style="text-align: center; color: #64748B;">Awaiting sync database matrix metrics streams...</p>
+                    <p style="text-align: center; color: #64748B;">Awaiting database synchronization...</p>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        const API_URL = window.location.origin.includes('5500') ? 'http://localhost:5000/api/grievances' : window.location.origin + '/api/grievances';
+        const API_URL = 'http://localhost:5000/api/grievances';
         let serverCacheData = [];
         let renderChartRef = null;
         let audioDictationCore = null;
@@ -172,7 +159,7 @@
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
-                base64StringData = e.target.result; // Dynamic base64 parsing block array mapped matrix
+                base64StringData = e.target.result;
             }
             reader.readAsDataURL(file);
         }
@@ -193,7 +180,7 @@
             const btn = document.getElementById('micTrigger');
             if (!isAudioStreaming) {
                 audioDictationCore.start(); isAudioStreaming = true;
-                btn.innerText = "Streaming Audio Input Active... 🛰️"; btn.style.background = "#ef4444";
+                btn.innerText = "Streaming Audio Active... 🛰️"; btn.style.background = "#ef4444";
             } else {
                 audioDictationCore.stop(); isAudioStreaming = false;
                 btn.innerText = "Activate Audio Matrix 🎙️"; btn.style.background = "#3b82f6";
@@ -203,16 +190,18 @@
         async function initializeLedgerSynchronizer() {
             try {
                 const res = await fetch(API_URL);
-                serverCacheData = await res.json();
-                updateUserInterfaceMatrices();
-                generateDynamicAnalyticalGraphics();
-                processDeepAIPredictions();
-            } catch (err) { console.error(err); }
+                if(res.ok) {
+                    serverCacheData = await res.json();
+                    updateUserInterfaceMatrices();
+                    generateDynamicAnalyticalGraphics();
+                    processDeepAIPredictions();
+                }
+            } catch (err) { console.error("Database connection off:", err); }
         }
 
         function processDeepAIPredictions() {
             const display = document.getElementById('aiInsightOutput');
-            if(serverCacheData.length === 0) { display.innerHTML = "System online. Send complaints payload packet details."; return; }
+            if(serverCacheData.length === 0) { display.innerHTML = "System online. Awaiting payloads."; return; }
             let metrics = { water: 0, infra: 0, sanitation: 0, admin: 0 };
             serverCacheData.forEach(r => {
                 if(r.category.includes("Water")) metrics.water++;
@@ -221,7 +210,7 @@
                 else metrics.admin++;
             });
             let top = Object.keys(metrics).map(k => ({name: k, total: metrics[k]})).sort((a,b)=>b.total-a.total)[0];
-            display.innerHTML = `<b>Primary Active Painpoint:</b> <span style="color:#C084FC; font-weight:bold;">${top.name.toUpperCase()} (${top.total} cases logged)</span><br>🎯 <b>Better Decision Support:</b> High telemetry priority index tracking across custom user inputted villages. Divert localized funding reserves into localized resource maps immediately.`;
+            display.innerHTML = `<b>Primary Active Painpoint:</b> <span style="color:#C084FC; font-weight:bold;">${top.name.toUpperCase()}</span> (${top.total} cases logged)<br>🎯 <b>AI Recommendation:</b> Fast-track technical evaluation in the reported village networks.`;
         }
 
         async function transmitPayloadToServer() {
@@ -245,7 +234,7 @@
                     base64StringData = "";
                     initializeLedgerSynchronizer();
                 }
-            } catch (err) { alert("Server pipeline write error."); }
+            } catch (err) { alert("Server connection failed."); }
         }
 
         async function triggerStateTransition(id) {
@@ -257,7 +246,7 @@
 
         function updateUserInterfaceMatrices() {
             const scroller = document.getElementById('ledgerScrollbox');
-            if(serverCacheData.length === 0) { scroller.innerHTML = `<p style="text-align: center;">No transaction maps loaded.</p>`; return; }
+            if(serverCacheData.length === 0) { scroller.innerHTML = `<p style="text-align: center;">No logs loaded.</p>`; return; }
             scroller.innerHTML = "";
             serverCacheData.forEach(node => {
                 const statusCheck = node.status.includes('Resolved');
@@ -268,11 +257,11 @@
                 box.innerHTML = `
                     <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94A3B8;">
                         <span>Ref ID: <b>${node.trackingId}</b></span>
-                        <button onclick="triggerStateTransition('${node.trackingId}')" style="font-size:0.7rem; padding:2px 8px; background:rgba(255,255,255,0.1)">Toggle state</button>
+                        <button onclick="triggerStateTransition('${node.trackingId}')" style="font-size:0.7rem; padding:2px 8px; background:rgba(255,255,255,0.1)">Toggle Status</button>
                     </div>
-                    <div style="font-size:0.85rem; margin:5px 0; color:#A855F7;">📍 Location: <b>${node.district}</b> > ${node.block} > <b>${node.village}</b></div>
+                    <div style="font-size:0.85rem; margin:5px 0; color:#A855F7;">📍 <b>${node.district}</b> > ${node.block} > <b>${node.village}</b></div>
                     <p style="margin:5px 0;">"${node.text}"</p>
-                    ${node.attachedGraphic ? `<img src="${node.attachedGraphic}" style="max-width:120px; border-radius:4px; display:block; margin:8px 0; border:1px solid var(--glass-border);" />` : ''}
+                    ${node.attachedGraphic ? `<img src="${node.attachedGraphic}" style="max-width:120px; border-radius:4px; display:block; margin:8px 0;" />` : ''}
                     <div style="margin-top:5px;"><mark style="font-size:0.7rem; background: #3B82F6; color:white; padding:2px 6px; border-radius:4px;">${node.category}</mark></div>
                 `;
                 scroller.appendChild(box);
@@ -287,7 +276,7 @@
             renderChartRef = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ["Water Metrics", "Infra Paths", "Sanitation", "General Admin"],
+                    labels: ["Water Dept", "Infra Paths", "Sanitation", "General Admin"],
                     datasets: [{ data: plotDeltas, backgroundColor: ['#3b82f6', '#eab308', '#10b981', '#a855f7'] }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
