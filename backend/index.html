@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Panchayat Sovereign Matrix</title>
+    <title>AI Panchayat Sovereign Matrix V2.4 - Clean Dropdown Edition</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         :root {
-            --bg-gradient: radial-gradient(circle at 50% 50%, #0c041f 0%, #030106 100%);
-            --glass-bg: rgba(15, 8, 32, 0.55);
-            --glass-border: rgba(147, 51, 234, 0.3);
+            --bg-gradient: radial-gradient(circle at 50% 50%, #060214 0%, #020104 100%);
+            --glass-bg: rgba(12, 6, 28, 0.65);
+            --glass-border: rgba(147, 51, 234, 0.35);
             --neon-purple: #A855F7;
             --neon-green: #10B981;
             --neon-red: #EF4444;
+            --neon-blue: #3B82F6;
             --text-primary: #F8FAFC;
         }
 
@@ -32,8 +37,8 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 25px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
             margin-bottom: 25px;
         }
 
@@ -41,16 +46,16 @@
             display: grid;
             grid-template-columns: 1fr 1.3fr;
             gap: 40px;
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1100px) {
             .main-layout { grid-template-columns: 1fr; }
         }
 
-        input, textarea {
-            background: rgba(5, 2, 10, 0.7) !important;
+        input, textarea, select {
+            background: rgba(5, 2, 10, 0.8) !important;
             border: 1px solid var(--glass-border) !important;
             color: var(--text-primary) !important;
             border-radius: 8px !important;
@@ -61,13 +66,20 @@
             border: none !important;
             color: white !important;
             font-weight: 700 !important;
-            box-shadow: 0 4px 14px rgba(147, 51, 234, 0.4);
+            box-shadow: 0 4px 14px rgba(147, 51, 234, 0.3);
             transition: all 0.3s ease !important;
+            cursor: pointer;
+        }
+
+        .neon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.5);
         }
 
         .scroll-ledger {
-            max-height: 420px;
+            max-height: 500px;
             overflow-y: auto;
+            padding-right: 5px;
         }
 
         .img-preview {
@@ -83,49 +95,60 @@
 
     <header class="container" style="text-align: center; margin-bottom: 40px;">
         <h1 style="background: linear-gradient(to right, #fff, #A855F7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; font-weight: 800;">
-            🏛️ TAMIL NADU SMART PANCHAYAT AI SYSTEM
+            🏛️ TAMIL NADU SMART PANCHAYAT AI SYSTEM <span style="font-size: 1rem; vertical-align: middle; color: var(--neon-green)">V2.4</span>
         </h1>
-        <p style="color: #94A3B8;">Dynamic Decentralized Feedback Hub • Manual Ingestion & Picture Ingestion Enabled</p>
+        <p style="color: #94A3B8;">Clean Dropdown Ingestion Engine • GIS Layer Removed</p>
         <hr style="border-color: var(--glass-border);">
     </header>
 
     <main class="main-layout">
-        <!-- FORM INGESTION MATRIX -->
         <section class="glass-card">
-            <h3 style="color: #C084FC; font-weight: 700;">👤 Manual Feedback Registry</h3>
+            <h3 style="color: #C084FC; font-weight: 700; margin-bottom: 20px;">👤 Feedback Registry Form</h3>
             
-            <label>Type District Name (மாவட்டம்):</label>
-            <input type="text" id="districtField" placeholder="e.g., Coimbatore, Madurai, Salem...">
+            <label>Select District (மாவட்டம்):</label>
+            <select id="districtField" onchange="updateBlockDropdown()">
+                <option value="">-- Choose District --</option>
+                <option value="Coimbatore">Coimbatore (கோயம்புத்தூர்)</option>
+                <option value="Madurai">Madurai (மதுரை)</option>
+                <option value="Salem">Salem (சேலம்)</option>
+                <option value="Trichy">Trichy (திருச்சி)</option>
+            </select>
 
-            <label>Type Block / Union Name (ஒன்றியம்):</label>
-            <input type="text" id="blockField" placeholder="e.g., Pollachi Union, Omalur Block...">
+            <label>Select Block / Union (ஒன்றியம்):</label>
+            <select id="blockField" onchange="updateVillageDropdown()">
+                <option value="">-- Select Block --</option>
+            </select>
 
-            <label>Type Village Panchayat Name (கிராம ஊராட்சி):</label>
-            <input type="text" id="villageField" placeholder="e.g., Arasur Village...">
+            <label>Select Village Panchayat (கிராம ஊராட்சி):</label>
+            <select id="villageField">
+                <option value="">-- Select Village --</option>
+            </select>
 
-            <label>Citizen Identity Header:</label>
+            <label style="margin-top: 15px;">Citizen Identity Header:</label>
             <input type="text" id="citizenName" placeholder="Enter Full Name (Optional)">
 
-            <label>📸 Reference Document Image Upload:</label>
+            <label style="margin-top: 15px;">📸 Reference Document Image Upload:</label>
             <input type="file" id="imageAttachment" accept="image/*" onchange="previewSelectedImage(event)">
             <img id="attachmentPreview" class="img-preview" alt="Attachment Matrix View">
 
-            <label style="margin-top: 15px;">🎤 Dictation Voice Core:</label>
-            <button type="button" id="micTrigger" class="neon-btn" onclick="toggleVoiceCoreStream()" style="background:#3b82f6 !important;">Activate Audio Matrix 🎙️</button>
+            <label style="margin-top: 15px;">🎤 Dictation Voice Core (Tamil):</label>
+            <button type="button" id="micTrigger" class="neon-btn" onclick="toggleVoiceCoreStream()" style="background:#3b82f6 !important; width: 100%;">Activate Audio Matrix 🎙️</button>
 
-            <label>Grievance Telemetry Statement Text:</label>
-            <textarea id="feedbackArea" rows="4" placeholder="Type detailed summaries here..."></textarea>
+            <label style="margin-top: 15px;">Grievance Telemetry Statement Text:</label>
+            <textarea id="feedbackArea" rows="4" placeholder="Type detailed summaries or stream voice text here..."></textarea>
 
-            <button type="button" class="neon-btn" onclick="transmitPayloadToServer()" style="width: 100%; background: var(--neon-green) !important;">Transmit Packet to Cloud Cluster 🚀</button>
+            <button type="button" class="neon-btn" onclick="transmitPayloadToServer()" style="width: 100%; background: var(--neon-green) !important; margin-top: 20px;">Transmit Packet to Cloud Cluster 🚀</button>
         </section>
 
-        <!-- LIVE ANALYTICS DATA PLATFORM LAYOUT -->
         <section style="display: flex; flex-direction: column;">
-            <div class="glass-card" style="border-left: 5px solid #A855F7; background: rgba(147, 51, 234, 0.05);">
-                <h4 style="color: #C084FC; margin-bottom: 8px;">🧠 AI Governance Trends & Decision Analytics</h4>
-                <div id="aiInsightOutput" style="font-size: 0.95rem; line-height: 1.6; color: #E2E8F0;">
-                    Awaiting live streaming transaction records...
+            <div class="glass-card" style="border-left: 5px solid #A855F7; background: rgba(147, 51, 234, 0.05); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="color: #C084FC; margin-bottom: 8px;">🧠 AI Governance Trends & Analytics</h4>
+                    <div id="aiInsightOutput" style="font-size: 0.95rem; line-height: 1.6; color: #E2E8F0;">
+                        Awaiting live streaming transaction records...
+                    </div>
                 </div>
+                <button class="neon-btn" onclick="generateExecutivePDFReport()" style="background: #ea580c !important; font-size: 0.8rem; padding: 10px 15px;">Export PDF 📄</button>
             </div>
 
             <div class="glass-card">
@@ -151,6 +174,55 @@
         let isAudioStreaming = false;
         let base64StringData = "";
 
+        // 🗺️ MASTER LOCATION DATASET
+        const localGeographicDataset = {
+            "Coimbatore": {
+                "Kinathukadavu Union": ["Arasur Village", "Kovilpalayam", "Sultanpet"],
+                "Pollachi Block": ["Anaimalai", "Zamin Uthukuli", "Nallur"]
+            },
+            "Madurai": {
+                "Melur Block": ["Uranganpatti", "A.Vellalapatti", "Kottampatti"],
+                "Vadipatti Union": ["Alanganallur", "Palamedu", "Sholavandan"]
+            },
+            "Salem": {
+                "Omalur Block": ["Karuppur", "Tholasampatti", "Kamalapuram"],
+                "Attur Union": ["Pethanaickenpalayam", "Malliakkarai", "Narasingapuram"]
+            },
+            "Trichy": {
+                "Lalgudi Block": ["Anbil", "Jangamarajapuram", "Lalgudi Rural"],
+                "Thiruverumbur Union": ["Navalpattu", "Thuvakudi", "Kattur"]
+            }
+        };
+
+        function updateBlockDropdown() {
+            const dist = document.getElementById('districtField').value;
+            const blockSelect = document.getElementById('blockField');
+            const villageSelect = document.getElementById('villageField');
+            
+            blockSelect.innerHTML = '<option value="">-- Select Block --</option>';
+            villageSelect.innerHTML = '<option value="">-- Select Village --</option>';
+
+            if (dist && localGeographicDataset[dist]) {
+                Object.keys(localGeographicDataset[dist]).forEach(block => {
+                    blockSelect.innerHTML += `<option value="${block}">${block}</option>`;
+                });
+            }
+        }
+
+        function updateVillageDropdown() {
+            const dist = document.getElementById('districtField').value;
+            const block = document.getElementById('blockField').value;
+            const villageSelect = document.getElementById('villageField');
+            
+            villageSelect.innerHTML = '<option value="">-- Select Village --</option>';
+
+            if (dist && block && localGeographicDataset[dist][block]) {
+                localGeographicDataset[dist][block].forEach(vil => {
+                    villageSelect.innerHTML += `<option value="${vil}">${vil}</option>`;
+                });
+            }
+        }
+
         function previewSelectedImage(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -164,11 +236,11 @@
             reader.readAsDataURL(file);
         }
 
+        // SPEECH MATRIX CORE
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const CoreInstance = window.SpeechRecognition || window.webkitSpeechRecognition;
             audioDictationCore = new CoreInstance();
             audioDictationCore.continuous = true;
-            audioDictationCore.interimResults = false;
             audioDictationCore.lang = 'ta-IN'; 
             audioDictationCore.onresult = function(e) {
                 document.getElementById('feedbackArea').value += " " + e.results[e.results.length - 1][0].transcript;
@@ -176,11 +248,11 @@
         }
 
         function toggleVoiceCoreStream() {
-            if (!audioDictationCore) { alert("Core Dictation Device Missing."); return; }
+            if (!audioDictationCore) return;
             const btn = document.getElementById('micTrigger');
             if (!isAudioStreaming) {
                 audioDictationCore.start(); isAudioStreaming = true;
-                btn.innerText = "Streaming Audio Active... 🛰️"; btn.style.background = "#ef4444";
+                btn.innerText = "Streaming Audio Active (Speak Tamil)... 🛰️"; btn.style.background = "#ef4444";
             } else {
                 audioDictationCore.stop(); isAudioStreaming = false;
                 btn.innerText = "Activate Audio Matrix 🎙️"; btn.style.background = "#3b82f6";
@@ -196,7 +268,7 @@
                     generateDynamicAnalyticalGraphics();
                     processDeepAIPredictions();
                 }
-            } catch (err) { console.error("Database connection off:", err); }
+            } catch (err) { console.error(err); }
         }
 
         function processDeepAIPredictions() {
@@ -204,65 +276,89 @@
             if(serverCacheData.length === 0) { display.innerHTML = "System online. Awaiting payloads."; return; }
             let metrics = { water: 0, infra: 0, sanitation: 0, admin: 0 };
             serverCacheData.forEach(r => {
-                if(r.category.includes("Water")) metrics.water++;
-                else if(r.category.includes("Roads")) metrics.infra++;
-                else if(r.category.includes("Sanitation")) metrics.sanitation++;
+                const txt = (r.text || "").toLowerCase();
+                if(txt.includes("thanni") || txt.includes("water")) metrics.water++;
+                else if(txt.includes("road") || txt.includes("salai")) metrics.infra++;
+                else if(txt.includes("kuppai") || txt.includes("drainage")) metrics.sanitation++;
                 else metrics.admin++;
             });
             let top = Object.keys(metrics).map(k => ({name: k, total: metrics[k]})).sort((a,b)=>b.total-a.total)[0];
-            display.innerHTML = `<b>Primary Active Painpoint:</b> <span style="color:#C084FC; font-weight:bold;">${top.name.toUpperCase()}</span> (${top.total} cases logged)<br>🎯 <b>AI Recommendation:</b> Fast-track technical evaluation in the reported village networks.`;
+            display.innerHTML = `<b>Primary Active Painpoint:</b> <span style="color:#C084FC; font-weight:bold;">${top.name.toUpperCase()} Cluster</span> (${top.total} cases logged)<br>🎯 <b>AI Action Recommendation:</b> Matrix optimization applied.`;
+        }
+
+        function speakLogAloud(textToSpeak) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const s = new SpeechSynthesisUtterance(textToSpeak);
+                s.lang = 'ta-IN';
+                window.speechSynthesis.speak(s);
+            }
         }
 
         async function transmitPayloadToServer() {
             const text = document.getElementById('feedbackArea').value.trim();
-            const district = document.getElementById('districtField').value.trim();
-            const block = document.getElementById('blockField').value.trim();
-            const village = document.getElementById('villageField').value.trim();
+            const district = document.getElementById('districtField').value;
+            const block = document.getElementById('blockField').value;
+            const village = document.getElementById('villageField').value;
             const name = document.getElementById('citizenName').value.trim() || "Anonymous Citizen";
 
-            if (!district || !block || !village || !text) { alert("Please complete manual input parameters."); return; }
+            if (!district || !block || !village || !text) { alert("Please complete location fields from the dropdown list."); return; }
+
+            let category = "General Administration 🏢";
+            if (text.includes("water") || text.includes("thanni")) category = "Water Supply Dept 💧";
+            else if (text.includes("road") || text.includes("salai")) category = "Roads & Infra 🛣️";
+            else if (text.includes("kuppai") || text.includes("drainage")) category = "Sanitation Dept ♻️";
+
+            const payloadPacket = {
+                district, block, village, name, text, category,
+                attachedGraphic: base64StringData,
+                timestamp: new Date().toISOString(),
+                trackingId: "REG-" + Math.floor(100000 + Math.random() * 900000),
+                status: "Pending Investigation ⏳"
+            };
 
             try {
-                const response = await fetch(API_URL, {
+                await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ district, block, village, name, text, attachedGraphic: base64StringData })
+                    body: JSON.stringify(payloadPacket)
                 });
-                if(response.ok) {
-                    document.getElementById('feedbackArea').value = "";
-                    document.getElementById('attachmentPreview').style.display = 'none';
-                    base64StringData = "";
-                    initializeLedgerSynchronizer();
-                }
-            } catch (err) { alert("Server connection failed."); }
+                clearForm();
+                initializeLedgerSynchronizer();
+            } catch (err) {
+                serverCacheData.unshift(payloadPacket);
+                updateUserInterfaceMatrices();
+                generateDynamicAnalyticalGraphics();
+                clearForm();
+            }
         }
 
-        async function triggerStateTransition(id) {
-            try {
-                const res = await fetch(`${API_URL}/${id}`, { method: 'PUT' });
-                if(res.ok) initializeLedgerSynchronizer();
-            } catch (err) { console.error(err); }
+        function clearForm() {
+            document.getElementById('feedbackArea').value = "";
+            document.getElementById('districtField').value = "";
+            updateBlockDropdown();
+            document.getElementById('attachmentPreview').style.display = 'none';
+            base64StringData = "";
         }
 
         function updateUserInterfaceMatrices() {
             const scroller = document.getElementById('ledgerScrollbox');
-            if(serverCacheData.length === 0) { scroller.innerHTML = `<p style="text-align: center;">No logs loaded.</p>`; return; }
+            if(serverCacheData.length === 0) { scroller.innerHTML = `<p style="text-align: center; color:#64748B;">No records loaded.</p>`; return; }
             scroller.innerHTML = "";
             serverCacheData.forEach(node => {
-                const statusCheck = node.status.includes('Resolved');
                 const box = document.createElement('div');
-                box.style.borderLeft = "4px solid " + (statusCheck ? "var(--neon-green)" : "var(--neon-purple)");
+                box.style.borderLeft = "4px solid var(--neon-purple)";
                 box.style.background = "rgba(255,255,255,0.02)";
                 box.style.padding = "15px"; box.style.borderRadius = "8px"; box.style.marginBottom = "12px";
                 box.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94A3B8;">
-                        <span>Ref ID: <b>${node.trackingId}</b></span>
-                        <button onclick="triggerStateTransition('${node.trackingId}')" style="font-size:0.7rem; padding:2px 8px; background:rgba(255,255,255,0.1)">Toggle Status</button>
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94A3B8; align-items:center;">
+                        <span>Ref ID: <b>${node.trackingId || 'REG-NX'}</b></span>
+                        <button onclick="speakLogAloud('${node.text}')" style="font-size:0.7rem; padding:2px 8px; margin:0; background:var(--neon-blue); border:none; color:white;">🔊 Hear</button>
                     </div>
                     <div style="font-size:0.85rem; margin:5px 0; color:#A855F7;">📍 <b>${node.district}</b> > ${node.block} > <b>${node.village}</b></div>
-                    <p style="margin:5px 0;">"${node.text}"</p>
+                    <p style="margin:5px 0; font-size:0.95rem;">"${node.text}"</p>
                     ${node.attachedGraphic ? `<img src="${node.attachedGraphic}" style="max-width:120px; border-radius:4px; display:block; margin:8px 0;" />` : ''}
-                    <div style="margin-top:5px;"><mark style="font-size:0.7rem; background: #3B82F6; color:white; padding:2px 6px; border-radius:4px;">${node.category}</mark></div>
+                    <div style="margin-top:5px;"><mark style="font-size:0.7rem; background: #3B82F6; color:white; padding:2px 6px; border-radius:4px;">${node.category || 'General'}</mark></div>
                 `;
                 scroller.appendChild(box);
             });
@@ -270,7 +366,7 @@
 
         function generateDynamicAnalyticalGraphics() {
             const keys = ["Water Supply Dept 💧", "Roads & Infra 🛣️", "Sanitation Dept ♻️", "General Administration 🏢"];
-            const plotDeltas = keys.map(cat => serverCacheData.filter(r => r.category === cat).length);
+            const plotDeltas = keys.map(cat => serverCacheData.filter(r => (r.category || '').includes(cat.substring(0,5))).length);
             const ctx = document.getElementById('analyticsGraphicCanvas').getContext('2d');
             if(renderChartRef) renderChartRef.destroy();
             renderChartRef = new Chart(ctx, {
@@ -282,7 +378,24 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
-        window.onload = initializeLedgerSynchronizer;
+
+        function generateExecutivePDFReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFillColor(12, 6, 28); doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255); doc.setFontSize(14);
+            doc.text("TAMIL NADU SMART PANCHAYAT AI GOVERNANCE REPORT", 14, 22);
+            const tableRows = [];
+            serverCacheData.forEach((item, idx) => {
+                tableRows.push([item.trackingId || `REG-${idx}`, `${item.district}, ${item.village}`, item.category || 'General', item.text]);
+            });
+            doc.autoTable({ startY: 50, head: [['ID', 'Location', 'Department', 'Statement']], body: tableRows });
+            doc.save(`Executive_Report.pdf`);
+        }
+
+        window.onload = function() {
+            initializeLedgerSynchronizer();
+        };
     </script>
 </body>
 </html>
